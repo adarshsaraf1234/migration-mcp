@@ -1,0 +1,15 @@
+{
+  "directed": false,
+  "multigraph": true,
+  "graph": { "schema_version": 1, "graphify_version": "0.9.94" },
+  "nodes": [
+    { "id": "handler_v2", "label": "handle()", "norm_label": "handle()", "source_file": "handler.js", "source_location": "L3", "_origin": "ast" },
+    { "id": "lookup", "label": "lookup()", "norm_label": "lookup()", "source_file": "lookup.js", "source_location": "L1", "_origin": "ast" },
+    { "id": "new_service", "label": "newService()", "norm_label": "newservice()", "source_file": "service.js", "source_location": "L1", "_origin": "ast" }
+  ],
+  "links": [
+    { "source": "handler_v2", "target": "lookup", "relation": "calls", "source_file": "handler.js", "source_location": "L8", "_origin": "ast", "confidence": "EXTRACTED", "confidence_score": 1, "context": "call", "weight": 1 },
+    { "source": "lookup", "target": "new_service", "relation": "imports_from", "source_file": "lookup.js", "source_location": "L9", "_origin": "ast", "confidence": "EXTRACTED", "confidence_score": 1, "context": "import", "weight": 1 }
+  ],
+  "hyperedges": []
+}

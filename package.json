@@ -1,0 +1,7 @@
+{
+  "name": "migration-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Graphify migration context and graph-diff adapters for the Migration MCP server"
+}

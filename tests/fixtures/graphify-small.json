@@ -1,0 +1,28 @@
+{
+  "directed": false,
+  "multigraph": true,
+  "graph": { "schema_version": 1, "graphify_version": "0.9.94" },
+  "nodes": [
+    { "id": "lookup", "label": "findById()", "_callable": true, "_origin": "ast", "file_type": "code", "source_file": "legacy-utils.js", "source_location": "L2", "norm_label": "findbyid()" },
+    { "id": "create", "label": "createOrder()", "_callable": true, "_origin": "ast", "file_type": "code", "source_file": "order-service.js", "source_location": "L6", "norm_label": "createorder()" },
+    { "id": "describe", "label": "describeProduct()", "_callable": true, "_origin": "ast", "file_type": "code", "source_file": "report.js", "source_location": "L4", "norm_label": "describeproduct()" },
+    { "id": "test-helper", "label": "callCreateOrder()", "_callable": true, "_origin": "ast", "file_type": "code", "source_file": "order-service.test.js", "source_location": "L5", "norm_label": "callcreateorder()" },
+    { "id": "order-file", "label": "order-service.js", "_origin": "ast", "file_type": "code", "source_file": "order-service.js", "source_location": "L1" },
+    { "id": "report-file", "label": "report.js", "_origin": "ast", "file_type": "code", "source_file": "report.js", "source_location": "L1" },
+    { "id": "order-test", "label": "order-service.test.js", "_origin": "ast", "file_type": "code", "source_file": "order-service.test.js", "source_location": "L1" },
+    { "id": "report-test", "label": "report.test.js", "_origin": "ast", "file_type": "code", "source_file": "report.test.js", "source_location": "L1" },
+    { "id": "another-find", "label": "findById()", "_callable": true, "_origin": "ast", "file_type": "code", "source_file": "other.js", "source_location": "L1", "norm_label": "findbyid()" }
+  ],
+  "links": [
+    { "source": "create", "target": "lookup", "relation": "calls", "_origin": "ast", "confidence": "EXTRACTED", "confidence_score": 1, "context": "call", "source_file": "order-service.js", "source_location": "L7", "weight": 1 },
+    { "source": "describe", "target": "lookup", "relation": "calls", "_origin": "ast", "confidence": "EXTRACTED", "confidence_score": 1, "context": "call", "source_file": "report.js", "source_location": "L5", "weight": 1 },
+    { "source": "test-helper", "target": "create", "relation": "calls", "_origin": "ast", "confidence": "EXTRACTED", "confidence_score": 1, "context": "call", "source_file": "order-service.test.js", "source_location": "L6", "weight": 1 },
+    { "source": "order-file", "target": "lookup", "relation": "imports", "_origin": "ast", "confidence": "EXTRACTED", "confidence_score": 1, "context": "import", "source_file": "order-service.js", "source_location": "L2", "weight": 1 },
+    { "source": "report-file", "target": "lookup", "relation": "imports", "_origin": "ast", "confidence": "EXTRACTED", "confidence_score": 1, "context": "import", "source_file": "report.js", "source_location": "L2", "weight": 1 },
+    { "source": "order-test", "target": "order-file", "relation": "imports_from", "_origin": "ast", "confidence": "EXTRACTED", "confidence_score": 1, "context": "import", "source_file": "order-service.test.js", "source_location": "L3", "weight": 1 },
+    { "source": "report-test", "target": "describe", "relation": "imports", "_origin": "ast", "confidence": "EXTRACTED", "confidence_score": 1, "context": "import", "source_file": "report.test.js", "source_location": "L3", "weight": 1 },
+    { "source": "order-file", "target": "create", "relation": "contains", "_origin": "ast", "source_file": "order-service.js", "source_location": "L6", "weight": 1 },
+    { "source": "ghost", "target": "lookup", "relation": "calls", "_origin": "ast", "source_file": "missing.js", "source_location": "L1", "weight": 1 }
+  ],
+  "hyperedges": []
+}
