@@ -1,6 +1,11 @@
 # Migration MCP
 
-A small stdio MCP server for Graphify-based legacy migration analysis. The Python server exposes `analyze_legacy_repo`, `get_migration_context`, and `compare_migration_graphs`. It reuses the bundled Graphify runner and JavaScript context/diff adapters; it does not modify native Graphify artifacts.
+A small MCP server for Graphify-based legacy migration analysis. It exposes
+`analyze_legacy_repo`, `get_migration_context`, and
+`compare_migration_graphs`, reusing the bundled Graphify runner and JavaScript
+context/diff adapters without modifying native Graphify artifacts. Local use
+defaults to stdio; an optional authenticated Streamable HTTP mode is available
+for hosted deployments.
 
 ## Requirements
 
@@ -43,3 +48,5 @@ The opt-in real Graphify workflow test is documented in `src/migration_mcp/READM
 
 See [`docs/hosted-deployment.md`](docs/hosted-deployment.md) for the hosted
 trial setup and security boundaries.
+
+For a Railway trial, follow [`docs/railway-deployment.md`](docs/railway-deployment.md).

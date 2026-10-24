@@ -19,9 +19,11 @@ uv sync --project src/migration_mcp
 uv run --project src/migration_mcp python src/migration_mcp/server.py
 ```
 
-The server communicates over stdin/stdout using MCP stdio. Diagnostic logging
-is configured for stderr so it does not corrupt protocol messages. Stop it
-with Ctrl-C or by closing the connected MCP client.
+By default, the server communicates over stdin/stdout using MCP stdio.
+Diagnostic logging goes to stderr so it does not corrupt protocol messages.
+Stop it with Ctrl-C or by closing the connected MCP client. Hosted deployments
+can set `MIGRATION_MCP_TRANSPORT=streamable-http`; that mode requires a
+32-character-or-longer `MIGRATION_MCP_HTTP_TOKEN` and an allowed host.
 
 ## `analyze_legacy_repo`
 
@@ -64,6 +66,8 @@ behavior is retained and remote clones are rejected. The Dockerfile sets the
 root to `/data/workspaces`; mount a persistent volume at `/data` if workspaces
 must survive container replacement. See the root
 [`hosted deployment guide`](../../docs/hosted-deployment.md).
+For Railway setup, HTTP transport, authentication and testing, see
+[`the Railway deployment guide`](../../docs/railway-deployment.md).
 
 ## `get_migration_context`
 

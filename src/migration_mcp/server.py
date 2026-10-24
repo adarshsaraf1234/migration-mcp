@@ -1,6 +1,7 @@
 """Migration MCP server with a thin Graphify runner integration."""
 
 import logging
+import os
 import sys
 from typing import Any
 
@@ -135,13 +136,39 @@ def compare_migration_graphs(
 
 
 def main() -> None:
-    """Run the server over MCP's stdio transport."""
+    """Run stdio locally, or authenticated Streamable HTTP when explicitly selected."""
     logging.basicConfig(
         stream=sys.stderr,
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
-    server.run(transport="stdio")
+    transport = os.environ.get("MIGRATION_MCP_TRANSPORT", "stdio").strip().lower()
+    if transport == "stdio":
+        server.run(transport="stdio")
+        return
+    if transport != "streamable-http":
+        raise RuntimeError("MIGRATION_MCP_TRANSPORT must be 'stdio' or 'streamable-http'.")
+
+    token = os.environ.get("MIGRATION_MCP_HTTP_TOKEN", "")
+    hosts = [host.strip() for host in os.environ.get(
+        "MIGRATION_MCP_ALLOWED_HOSTS", os.environ.get("RAILWAY_PUBLIC_DOMAIN", "")
+    ).split(",") if host.strip()]
+    origins = [origin.strip() for origin in os.environ.get("MIGRATION_MCP_ALLOWED_ORIGINS", "").split(",") if origin.strip()]
+    try:
+        port = int(os.environ.get("PORT", "8000"))
+    except ValueError as exc:
+        raise RuntimeError("PORT must be an integer.") from exc
+    if not 1 <= port <= 65535:
+        raise RuntimeError("PORT must be between 1 and 65535.")
+
+    if __package__:
+        from .http_transport import create_http_app
+    else:
+        from http_transport import create_http_app
+    app = create_http_app(server, token, hosts, origins)
+    import uvicorn
+
+    uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
 
 
 if __name__ == "__main__":
