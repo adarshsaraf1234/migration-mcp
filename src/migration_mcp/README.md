@@ -25,12 +25,20 @@ with Ctrl-C or by closing the connected MCP client.
 
 ## `analyze_legacy_repo`
 
-The tool accepts a `repository_path` and optional positive `timeout_seconds`
-(default 300). The target must be a directory containing `package.json` and
-must not be this product repository. It launches `graphify-runner.js` with a
-separate argument for the target, from the product repository as its working
-directory. A result has `success`, `target_repository`, `artifacts`,
-`artifact_presence`, `warnings`, and, on failure, a structured `error`.
+The tool accepts exactly one of `repository_path` or `repository_url`, plus
+optional `revision` and positive `timeout_seconds` (default 300). A local path
+must be a directory containing `package.json` and must not be this product
+repository. A remote URL is restricted to credential-free HTTPS URLs on
+`github.com`; the server shallow-clones the public repo into a uniquely named
+workspace. It does not support private repositories, submodules, or other Git
+hosts. In hosted mode, if the cloned repository lacks `package.json`, the
+server creates a temporary marker inside that clone because the existing
+runner requires it; it is never written back to the remote repository.
+
+The server launches `graphify-runner.js` with a separate argument for the
+target, from the product repository as its working directory. A result has
+`success`, `target_repository`, `artifacts`, `artifact_presence`, `warnings`,
+and, on failure, a structured `error`.
 Success requires a zero runner exit and all three native artifacts:
 `graph.json`, `GRAPH_REPORT.md`, and `graph.html` under the target's
 `graphify-out/` directory.
@@ -40,6 +48,22 @@ Node.js is found on the process PATH or can be set with
 and in `~/.local/bin`; set `MIGRATION_MCP_GRAPHIFY` to its executable path to
 configure it explicitly. Because `graphify-runner.js` invokes the executable
 as `graphify`, an explicitly configured executable must have that filename.
+Remote analysis also returns `remote_repository` metadata identifying the
+workspace, URL, requested revision, resolved commit and temporary marker
+status. Workspaces remain available for later context and comparison calls;
+the server removes only expired directories carrying its own ownership marker.
+Defaults are 168 hours and 25 workspaces. Expired workspaces become eligible
+for deletion and are removed before a subsequent remote clone; the server
+never deletes unmarked directories.
+
+## Hosted workspace boundary
+
+Set `MIGRATION_MCP_WORKSPACE_ROOT` to enable remote cloning and restrict
+repository and graph inputs to that directory. Without it, existing local path
+behavior is retained and remote clones are rejected. The Dockerfile sets the
+root to `/data/workspaces`; mount a persistent volume at `/data` if workspaces
+must survive container replacement. See the root
+[`hosted deployment guide`](../../docs/hosted-deployment.md).
 
 ## `get_migration_context`
 

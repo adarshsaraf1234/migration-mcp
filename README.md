@@ -9,6 +9,11 @@ A small stdio MCP server for Graphify-based legacy migration analysis. The Pytho
 - Node.js
 - Graphify CLI for repository analysis
 
+For a hosted deployment, the included `Dockerfile` supplies Node.js, Python,
+Git, Graphify (`graphifyy==0.9.94`) and the locked MCP Python runtime. It also
+supports public GitHub repository URLs; see
+[`docs/hosted-deployment.md`](docs/hosted-deployment.md).
+
 ## Install and run
 
 From the repository root:
@@ -22,7 +27,7 @@ For nonstandard executable locations, set `MIGRATION_MCP_NODE` and `MIGRATION_MC
 
 ## Tools
 
-- `analyze_legacy_repo(repository_path, timeout_seconds?)` runs the bundled Graphify runner and verifies `graph.json`, `GRAPH_REPORT.md`, and `graph.html`.
+- `analyze_legacy_repo(repository_path?, repository_url?, revision?, timeout_seconds?)` runs the bundled Graphify runner and verifies `graph.json`, `GRAPH_REPORT.md`, and `graph.html`. Supply exactly one local path or public GitHub URL.
 - `get_migration_context(graph_path, target, max_depth?, max_nodes?, max_edges?, timeout_seconds?)` returns bounded context from the native graph.
 - `compare_migration_graphs(baseline_graph_path, after_graph_path, timeout_seconds?)` returns the structural graph diff.
 
@@ -35,3 +40,6 @@ uv run --project src/migration_mcp python -m unittest discover -s src/migration_
 ```
 
 The opt-in real Graphify workflow test is documented in `src/migration_mcp/README.md`. Structural graph differences do not establish behavioral equivalence; run and review relevant tests separately.
+
+See [`docs/hosted-deployment.md`](docs/hosted-deployment.md) for the hosted
+trial setup and security boundaries.

@@ -49,6 +49,21 @@ class MigrationMCPServerSmokeTest(unittest.IsolatedAsyncioTestCase):
             self.assertFalse(comparison_error["success"])
             self.assertEqual(comparison_error["error"]["code"], "GRAPH_NOT_FOUND")
 
+            remote_error_response = await client.call_tool(
+                "analyze_legacy_repo",
+                {"repository_url": "https://example.com/not-github/repo"},
+            )
+            remote_error = remote_error_response.structured_content
+            self.assertIsNotNone(remote_error)
+            self.assertFalse(remote_error["success"])
+            self.assertEqual(remote_error["error"]["code"], "INVALID_REPOSITORY_URL")
+
+            missing_target_response = await client.call_tool("analyze_legacy_repo", {})
+            missing_target = missing_target_response.structured_content
+            self.assertIsNotNone(missing_target)
+            self.assertFalse(missing_target["success"])
+            self.assertEqual(missing_target["error"]["code"], "INVALID_REPOSITORY_INPUT")
+
 
 if __name__ == "__main__":
     unittest.main()
