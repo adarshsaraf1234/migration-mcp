@@ -1,4 +1,4 @@
-# Glama can wrap this stdio MCP process in its hosted HTTP endpoint.
+# Hosted MCP server image; configure persistent storage in the hosting platform.
 FROM ghcr.io/astral-sh/uv:0.8.17 AS uv
 FROM node:22-bookworm-slim
 
@@ -28,6 +28,5 @@ RUN uv sync --locked --project /app/src/migration_mcp --no-dev \
     && chown -R migration:migration /app
 
 USER migration
-VOLUME ["/data"]
 EXPOSE 8000
 CMD ["/app/src/migration_mcp/.venv/bin/python", "/app/src/migration_mcp/server.py"]
